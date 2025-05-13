@@ -13,10 +13,9 @@ COPY . .
 
 RUN chmod 0755 /home/appuser/src/sortphotos.sh
 
-# Ensure log file exists and is writable
 RUN touch /var/log/cron.log && chmod 666 /var/log/cron.log
+RUN touch /tmp/crond.pid && chmod 666 /tmp/crond.pid
 
-# Install cron job for appuser
 RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /var/log/cron.log 2>&1" | crontab -u appuser -
 
 USER appuser
@@ -24,4 +23,4 @@ USER appuser
 VOLUME ["/messyPhotos"]
 VOLUME ["/cleanPhotos"]
 
-CMD ["crond", "-f", "-p", "/tmp/crond.pid"]
+CMD ["/usr/sbin/crond", "-f", "-p", "/tmp/crond.pid"]
