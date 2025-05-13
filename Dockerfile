@@ -24,4 +24,4 @@ VOLUME ["/cleanPhotos"]
 # Add the cron job
 RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /var/log/cron.log 2>&1" | crontab -
 
-CMD ["crond", "-f"]
+CMD ["crond", "-f", "-p", "/tmp/crond.pid"]
