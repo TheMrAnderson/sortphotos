@@ -16,6 +16,8 @@ RUN chmod 0755 /home/appuser/src/sortphotos.sh
 RUN touch /var/log/cron.log && chmod 666 /var/log/cron.log
 RUN touch /tmp/crond.pid && chmod 666 /tmp/crond.pid
 
+RUN mkdir -p /run && chmod 777 /run
+
 RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /var/log/cron.log 2>&1" | crontab -u appuser -
 
 USER appuser
