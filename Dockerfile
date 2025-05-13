@@ -11,11 +11,12 @@ WORKDIR /home/appuser
 COPY ./requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-USER appuser
 COPY . .
 
-# Give execution rights on the cron script
+# Give execution rights on the cron script (as root)
 RUN chmod 0755 /home/appuser/src/sortphotos.sh
+
+USER appuser
 
 VOLUME ["/messyPhotos"]
 VOLUME ["/cleanPhotos"]
