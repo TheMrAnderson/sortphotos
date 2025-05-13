@@ -1,9 +1,7 @@
 FROM python:3.13-alpine
 
-# Install necessary packages
 RUN apk add --no-cache shadow bash cronie
 
-# Create user
 RUN adduser -S -h /home/appuser -s /bin/bash appuser
 
 WORKDIR /home/appuser
@@ -13,15 +11,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Give execution rights on the cron script (as root)
 RUN chmod 0755 /home/appuser/src/sortphotos.sh
+
+# Ensure log file exists and is writable
+RUN touch /var/log/cron.log && chmod 666 /var/log/cron.log
+
+# Install cron job for appuser
+RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /var/log/cron.log 2>&1" | crontab -u appuser -
 
 USER appuser
 
 VOLUME ["/messyPhotos"]
 VOLUME ["/cleanPhotos"]
-
-# Add the cron job
-RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /var/log/cron.log 2>&1" | crontab -
 
 CMD ["crond", "-f", "-p", "/tmp/crond.pid"]
