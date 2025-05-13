@@ -20,9 +20,7 @@ RUN mkdir -p /run && chmod 777 /run
 
 RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /var/log/cron.log 2>&1" | crontab -u appuser -
 
-USER appuser
-
 VOLUME ["/messyPhotos"]
 VOLUME ["/cleanPhotos"]
 
-CMD ["/usr/sbin/crond", "-f", "-p", "/tmp/crond.pid"]
+CMD ["/usr/sbin/crond", "-f"]
