@@ -1,15 +1,14 @@
-name: Docker Image Dev - Latest
+name: Docker Image Prod - Latest
 
 on:
-  push:
-    branches-ignore:
-      - master
   pull_request:
-    branches-ignore:
-      - master
+    types:
+      - closed
+    branches: ['master']
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +25,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: themranderson/sortphotos:latest
+          tags: themranderson/sortphotos:stable
           provenance: true
           sbom: true
