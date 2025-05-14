@@ -18,7 +18,7 @@ RUN touch /tmp/crond.pid && chmod 666 /tmp/crond.pid
 
 RUN mkdir -p /run && chmod 777 /run
 
-RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /var/log/cron.log 2>&1" | crontab -u appuser -
+RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /proc/1/fd/1 2>&1" | crontab -u appuser -
 
 VOLUME ["/messyPhotos"]
 VOLUME ["/cleanPhotos"]
