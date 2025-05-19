@@ -21,4 +21,4 @@ RUN printf 'MAILTO=""\n*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos
 VOLUME ["/messyPhotos"]
 VOLUME ["/cleanPhotos"]
 
-CMD ["/usr/sbin/crond", "-f", "-x", "sch,proc,pars"]
+CMD ["/usr/sbin/crond", "-f"]
