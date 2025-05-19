@@ -4,14 +4,16 @@ SCRIPT_DIR=$3
 
 export PATH="/usr/local/bin:/usr/bin:/bin"
 echo "$(date) Starting to sort photos in $SEARCH_DIR and move them to $DEST_DIR."
-clear
-# Remove empty files
-echo Removing all empty files
-find $SEARCH_DIR -type f -empty -delete
 
 # Remove json files
-echo Removing json files
+echo Removing non photo related files
 python3 $SCRIPT_DIR/removefiles.py $SEARCH_DIR json
+python3 $SCRIPT_DIR/removefiles.py $SEARCH_DIR db
+python3 $SCRIPT_DIR/removefiles.py $SEARCH_DIR ctg
+
+# Remove empty folders
+echo Removing all empty folders
+find $SEARCH_DIR -type f -empty -delete
 
 # Sort photos
 echo Sorting photos
