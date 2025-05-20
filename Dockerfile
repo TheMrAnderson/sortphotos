@@ -2,8 +2,6 @@ FROM python:3.13-alpine
 
 RUN apk add --no-cache shadow bash cronie perl
 
-RUN adduser -S -h /home/appuser -s /bin/bash appuser
-
 WORKDIR /home/appuser
 
 COPY ./requirements.txt requirements.txt
@@ -18,7 +16,7 @@ RUN touch /tmp/crond.pid && chmod 666 /tmp/crond.pid
 
 RUN mkdir -p /run && chmod 777 /run
 
-RUN echo "*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /var/log/cron.log 2>&1" | crontab -u appuser -
+RUN printf 'MAILTO=""\n*/10 * * * * /home/appuser/src/sortphotos.sh /messyPhotos /cleanPhotos /home/appuser/src/ >> /proc/1/fd/1 2>&1\n' | crontab -
 
 VOLUME ["/messyPhotos"]
 VOLUME ["/cleanPhotos"]
