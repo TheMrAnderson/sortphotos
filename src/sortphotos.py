@@ -370,7 +370,7 @@ def sortPhotos(src_dir, dest_dir, sort_format, rename_format, recursive=False,
             continue
 
         if verbose:
-            print('Date/Time: ' + + date.isoformat(' '))
+            print('Date/Time: ' + date.isoformat(' '))
             print('Corresponding Tags: ' + ', '.join(keys))
 
         # early morning photos can be grouped with previous day (depending on user setting)
