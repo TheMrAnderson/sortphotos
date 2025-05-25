@@ -58,7 +58,7 @@ def parse_date_exif(date_string):
     else:
         return None
 
-   # parse hour, min, second
+   # parse hour, min, second, microsecond
     time_zone_adjust = False
     hour = 12  # defaulting to noon if no time data provided
     minute = 0
@@ -69,7 +69,7 @@ def parse_date_exif(date_string):
         time_entries = re.split(r'(\+|-|Z)', elements[1])  # ['HH:MM:SS', '+', 'HH:MM']
         time = time_entries[0].split(':')  # ['HH', 'MM', 'SS']
 
-        if len(time) == 3:
+        if len(time) >= 3:
             hour = int(time[0])
             minute = int(time[1])
             sec_float = float(time[2])
