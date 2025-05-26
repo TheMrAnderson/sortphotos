@@ -1,7 +1,6 @@
 SEARCH_DIR=$1
 DEST_DIR=$2
 SCRIPT_DIR=$3
-USER=$4
 
 export PATH="/usr/local/bin:/usr/bin:/bin"
 echo "$(date) Starting to sort photos in $SEARCH_DIR and move them to $DEST_DIR."
@@ -21,7 +20,7 @@ echo Sorting photos
 python3 $SCRIPT_DIR/sortphotos.py $SEARCH_DIR $DEST_DIR --recursive --sort %Y/%Y-%m/ --rename %Y%m%d_%H%M%S%f --clean_src_dir True
 mkdir -p $SEARCH_DIR
 
-chown -R $USER: $SEARCH_DIR # Set ownership to the user
+chown -R 777 $SEARCH_DIR # Set ownership to the user
 
 echo "$(date) Finished sorting photos."
 echo ""
