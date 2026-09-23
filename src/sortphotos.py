@@ -179,6 +179,28 @@ def check_for_early_morning_photos(date, day_begins):
     return date
 
 
+def clean_empty_source_dirs(src_dir):
+    """Remove empty subdirectories without deleting the source root."""
+
+    print(f'Deleting empty directories in {src_dir}')
+    bash_command = f'find {src_dir} -mindepth 1 -type d -empty -delete'
+    process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+
+
+def has_files_to_process(src_dir, recursive=False):
+    """Check whether there are any files left to process."""
+
+    find_args = ['find', src_dir, '-type', 'f']
+    if not recursive:
+        find_args = ['find', src_dir, '-maxdepth', '1', '-type', 'f']
+
+    process = subprocess.Popen(find_args, stdout=subprocess.PIPE)
+    output, error = process.communicate()
+
+    return bool(output.strip())
+
+
 #  this class is based on code from Sven Marnach (http://stackoverflow.com/questions/10075115/call-exiftool-from-a-python-script)
 class ExifTool(object):
     """used to run ExifTool from Python and keep it open"""
@@ -279,11 +301,7 @@ def sortPhotos(src_dir, dest_dir, sort_format, rename_format, recursive=False,
         raise Exception('Source directory does not exist')
 
     if clean_src_dir:
-        print(f'Deleting empty directories in {src_dir}')
-        bash_command = f'find {src_dir} -type d -empty -delete'
-        process = subprocess.Popen(
-            bash_command.split(), stdout=subprocess.PIPE)
-        output, error = process.communicate()
+        clean_empty_source_dirs(src_dir)
 
     # clear out empty files since EXIF tool doesn't handle them properly
     if verbose:
@@ -291,6 +309,10 @@ def sortPhotos(src_dir, dest_dir, sort_format, rename_format, recursive=False,
     bash_command = f'find {src_dir} -type f -empty -delete'
     process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
+
+    if not has_files_to_process(src_dir, recursive):
+        print(f'No supported image files found in {src_dir}')
+        return
 
     # setup arguments to exiftool
     args = ['-j', '-a', '-G']
@@ -464,10 +486,7 @@ def sortPhotos(src_dir, dest_dir, sort_format, rename_format, recursive=False,
             # sys.stdout.flush()
 
     if clean_src_dir:
-        print(f'Deleting empty directories in {src_dir}')
-        bash_command = f'find {src_dir} -type d -empty -delete'
-        process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-        output, error = process.communicate()
+        clean_empty_source_dirs(src_dir)
 
     if not verbose:
         print()

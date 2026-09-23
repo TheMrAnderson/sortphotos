@@ -1,6 +1,6 @@
 # SortPhotos
 
-PythonScript forked from [andrewning](https://github.com/andrewning/sortphotos) but his repo went stale.  I made a small [PR](https://github.com/andrewning/sortphotos/pull/147) that never got merged into his code and after 3 years, I decided it was time to Dockerize this and consolidate my additions I had used to clean up my multiple iPhoto libraries and the random mix of pictures after iPhoto.  I had been searching for a better way to manage my photos, looking at all the libraries and decided it was better to manage them myself in folders than have some proprietary tool manage them however seemed fit.
+PythonScript forked from [andrewning](https://github.com/andrewning/sortphotos) but his repo went stale.  I made a small [PR](https://github.com/andrewning/sortphotos/pull/147) that never got merged into his code and after 3 years, I decided it was time to Dockerize this and consolidate my additions I had used to clean up my multiple iPhoto libraries and the random mix of pictures after iPhoto. The Docker images are published to GitHub Container Registry.  I had been searching for a better way to manage my photos, looking at all the libraries and decided it was better to manage them myself in folders than have some proprietary tool manage them however seemed fit.
 
 This is now my only means of managing my photos & videos and I just have viewers like Plex mapped to my photo directory.  I can download photos from our phones, SLR camera, action cameras, professional photos and any other source, dump them all into a single folder and let this handle the rest.  Naming schemes no longer matter and all the photos & videos get sorted by their EXIF data, so as long as the cameras have the correct time, all your memories will be together.  I have mine grouped by year and month which makes it pretty easy to find.  If I am looking back for something, like my son's 3rd birthday party, I know exactly where to go.
 
@@ -17,6 +17,24 @@ This is now my only means of managing my photos & videos and I just have viewers
 - `/dest_photo` The final destination for your sorted photos
 
 ## Usage
+
+The published images are available from GitHub Container Registry:
+
+```sh
+docker pull ghcr.io/themranderson/sortphotos:latest
+```
+
+Pushes to non-`master` branches publish `latest` for development. Before publishing, update the `version` in `setup.py`. It must match the release tag exactly: for `version='1.2.3'`, create the tag `v1.2.3`. To publish a release, create that version tag. The release workflow publishes the version tag and updates both `stable` and `latest`:
+
+```sh
+docker pull ghcr.io/themranderson/sortphotos:1.2.3
+```
+
+The same release is also available as:
+
+```sh
+docker pull ghcr.io/themranderson/sortphotos:stable
+```
 
 Dump your photos from all your old sources into `/src_photo` and treat this as your photo upload folder.  This allows you to point this to a continuous location.  Photos from the phone, and SD cards get dumped into this folder.  I have called mine PhotoUpload on my computer so I avoid confusion.
 
